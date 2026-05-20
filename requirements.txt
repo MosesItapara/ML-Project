@@ -6,3 +6,5 @@ plotly
 scikit-learn
 xgboost
 dill
+catboost
+lightgbm
