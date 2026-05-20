@@ -1,10 +1,14 @@
-import os
 import sys
+import os
 import pandas as pd
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
 from src.logger import logging
 from src.exception import CustomException
 
 from sklearn.model_selection import train_test_split
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
 from dataclasses import dataclass
 
 @dataclass
@@ -21,7 +25,7 @@ class DataIngestion:
     def initiate_data_ingestion(self):
         logging.info("Entered the data ingestion method or component")
         try:
-            df = pd.read_csv(os.path.join("notebook\\calories_data.csv"))
+            df = pd.read_csv(os.path.join("notebook", "calories_data.csv"))
             logging.info("Read the dataset as dataframe")
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
@@ -43,3 +47,11 @@ class DataIngestion:
 
         except Exception as e:
             raise CustomException(e, sys)
+        
+    
+if __name__ == "__main__":
+    obj = DataIngestion()
+    train_data, test_data = obj.initiate_data_ingestion()
+
+    data_transformation = DataTransformation()
+    data_transformation.initiate_data_transformation(train_data, test_data)
